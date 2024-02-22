@@ -1,8 +1,7 @@
-import React, { useState } from "react";
+import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import toast, { Toaster } from "react-hot-toast";
 import { loginUser } from "../store/authStore";
-import Cookies from "js-cookie";
 
 const LoginComponent = () => {
   const [formData, setFormData] = useState({
@@ -19,22 +18,12 @@ const LoginComponent = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      const response = await loginUser(formData);
+      const response = await loginUser(formData.email, formData.password);
       if (response.status === "success") {
-        // Calculate expiration time based on the server's response
-        const expirationTime = response.expiresIn
-          ? new Date(response.expiresIn)
-          : new Date(Date.now() + 24 * 6060 * 1000);
-
-        // Set token into cookies with expiration time
-        Cookies.set("token", response.token, {
-          expires: expirationTime,
-          httpOnly: false,
-        }); // Set expiry date as needed
-        toast.success(response.message); // Display success message
-        navigate("/"); // Redirect to dashboard
+        toast.success(response.message);
+        navigate("/");
       } else {
-        toast.error(response.message || "Failed to login"); // Display error message
+        toast.error(response.message || "Failed to login");
       }
     } catch (error) {
       console.error("Error logging in:", error);
@@ -51,6 +40,7 @@ const LoginComponent = () => {
             name="email"
             className="form-control"
             placeholder="Email"
+            value={formData.email}
             onChange={handleChange}
             required
           />
@@ -61,6 +51,7 @@ const LoginComponent = () => {
             name="password"
             className="form-control"
             placeholder="Password"
+            value={formData.password}
             onChange={handleChange}
             required
           />

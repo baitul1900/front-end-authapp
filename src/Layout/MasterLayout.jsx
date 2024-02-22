@@ -1,9 +1,8 @@
-// MasterLayout.jsx
-
 import React, { Fragment, useState, useEffect } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import Cookies from "js-cookie";
-import { getUserProfile } from "../store/authStore"; // Import the getUserProfile function
+import axios from "axios"; // Import axios
+ // Assuming you have a constant for the base URL
 
 const MasterLayout = (props) => {
   const [userData, setUserData] = useState(null);
@@ -13,9 +12,14 @@ const MasterLayout = (props) => {
   useEffect(() => {
     const fetchUserProfile = async () => {
       try {
-        const profileData = await getUserProfile();
-        console.log('User Profile Data:', profileData); // Log the profileData
-        setUserData(profileData.data);
+        const token = Cookies.get("token");
+        const config = {
+          headers: {
+            Authorization: `Bearer ${token}`, // Set the Authorization header with the token
+          },
+        };
+        const response = await axios.get("http://localhost:8000/api/v1/profile", config); // Fetch user profile data
+        setUserData(response.data.data); // Assuming the user data is nested under the 'data' key
       } catch (error) {
         console.error('Error fetching user profile:', error);
       }
@@ -61,7 +65,7 @@ const MasterLayout = (props) => {
                           <img
                             src={
                               userData.image
-                                ? userData["data"]["image"]
+                                ? userData.image
                                 : "user-avatar.png"
                             }
                             alt="User Avatar"
