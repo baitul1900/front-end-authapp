@@ -1,16 +1,19 @@
-import React from 'react';
 import {BrowserRouter,Routes,Route} from "react-router-dom";
-// import NewReg from './pages/NewReg';
-import RegList from './pages/RegList';
-import OTPComponent from './components/OTPComponent';
+import RegistrationPage from './pages/RegistrationPage';
+import LoginPage from "./pages/LoginPage";
+import DashBoard from "./pages/DashBoard";
 
 const App = () => {
   return (
     <BrowserRouter>
             <Routes>
                 {/* <Route path="/form" element={<NewReg/>}/> */}
-                <Route path="/" element={<RegList/>}/>
+                {/* <Route path="/" element={<RegList/>}/>
                 <Route path="/otp" element={<OTPComponent/>}/>
+                <Route path="/login" element={<LoginComponent/>}/> */}
+                <Route path="/registration" element={<RegistrationPage/>}/>
+                <Route path="/"  element={<DashBoard/>}/>
+                <Route path="/login" element={<LoginPage/>}/>
             </Routes>
     </BrowserRouter>
   );

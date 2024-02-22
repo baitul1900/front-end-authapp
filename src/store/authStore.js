@@ -1,4 +1,5 @@
 import axios from 'axios';
+import Cookies from 'js-cookie';
 
 const BASE_URL = 'http://localhost:8000/api/v1';
 
@@ -23,4 +24,24 @@ export const verifyOTP = async (email, otp) => {
 };
 
 
+export const loginUser = async (userData) => {
+    try {
+      const response = await axios.post(`${BASE_URL}/login`, userData);
+      return response.data;
+    } catch (error) {
+      throw new Error('Failed to login');
+    }
+  }
 
+
+  export const getUserProfile = async () => {
+    try {
+      const response = await axios.get(`${BASE_URL}/api/v1/profile`); // Assuming the profile endpoint is '/api/v1/profile'
+      return response.data;
+    } catch (error) {
+      throw new Error('Failed to fetch user profile');
+    }
+  }
+  
+  
+  

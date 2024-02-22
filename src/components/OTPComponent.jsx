@@ -31,7 +31,7 @@ const OTPComponent = () => {
       );
       if (response && response.status === "success") {
         toast.success("OTP verified successfully"); // Display success message
-        navigate("/dashboard"); // Redirect to dashboard
+        navigate("/login"); // Redirect to dashboard
       } else {
         toast.error(response.message || "Failed to verify OTP"); // Display error message
       }
