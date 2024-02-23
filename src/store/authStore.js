@@ -1,3 +1,4 @@
+/* eslint-disable no-useless-catch */
 import axios from 'axios';
 import Cookies from 'js-cookie';
 
@@ -62,6 +63,186 @@ export const getUserProfile = async () => {
 };
   
   
+export const updateUserProfile = async (password, image) => {
+  try {
+    const token = sessionStorage.getItem('token');
+    const response = await axios.post(
+      `${BASE_URL}/updateProfile`,
+      { password, image },
+      {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      }
+    );
+    return response.data;
+  } catch (error) {
+    throw new Error(error.response.data.message || 'Failed to update profile');
+  }
+};  
   
-  
-  
+export const brandList = async () => {
+  try {
+    const token = sessionStorage.getItem('token');
+    const response = await axios.get(`${BASE_URL}/brandList`, {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    });
+    return response.data;
+  } catch (error) {
+    throw new Error(error.response.data.message || 'Failed to update profile');
+  }
+};
+
+
+export const createBrand = async (brand) => {
+  try {
+    const token = sessionStorage.getItem('token');
+    const response = await axios.post(`${BASE_URL}/create-brand`, brand, {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    });
+    return response.data;
+  } catch (error) {
+    throw new Error(error.response.data.message || 'Failed to update profile');
+  }
+};
+
+// Assuming you have imported Axios and set up the baseURL
+
+export const updateBrand = async (id, data) => {
+  try {
+    const token = Cookies.get("token"); // Get the authorization token
+    const response = await axios.post(`${BASE_URL}/brand/${id}`, data, {
+      headers: {
+        Authorization: `Bearer ${token}`, // Include the authorization token in the headers
+      },
+    });
+    return response.data;
+  } catch (error) {
+    throw error;
+  }
+};
+
+export const fetchBrandById = async (id) => {
+  try {
+    const token = Cookies.get('token'); // Get the token from cookies
+    const headers = {
+      Authorization: `Bearer ${token}`, // Include the token in the request headers
+    };
+    const response = await axios.get(`${BASE_URL}/getbrand/${id}`, { headers });
+    return response.data;
+  } catch (error) {
+    console.error('Error fetching brand by ID:', error);
+    throw error;
+  }
+};
+
+
+export const deleteBrand = async (id) => {
+  try {
+    // Get the token from cookies
+    const token = Cookies.get("token");
+
+    // Set the headers with authorization token
+    const headers = {
+      Authorization: `Bearer ${token}`,
+    };
+
+    // Make the DELETE request to the backend API
+    const response = await axios.get(`${BASE_URL}/deleteBrand/${id}`, { headers });
+
+    // Return the response data
+    return response.data;
+  } catch (error) {
+    // Handle errors
+    throw error;
+  }
+};
+
+
+// catergory api here
+
+
+
+export const createCategory = async (category) => {
+  try {
+    const token = sessionStorage.getItem('token');
+const response = await axios.post(`${BASE_URL}/create-category`, category, {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    });
+    return response.data;
+  } catch (error) {
+    throw new Error(error.response.data.message || 'Failed to update profile');
+  }
+};
+
+
+export const categoryList = async () => {
+  try {
+    const token = sessionStorage.getItem('token');
+    const response = await axios.get(`${BASE_URL}/category`, {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    });
+    return response.data;
+  } catch (error) {
+    throw new Error(error.response.data.message || 'Failed to get category');
+  }
+};
+
+
+export const updateCategory = async (id, data) => {
+  try {
+    const token = Cookies.get("token"); // Get the authorization token
+    const response = await axios.post(`${BASE_URL}/category-update/${id}`, data, {
+      headers: {
+        Authorization: `Bearer ${token}`, // Include the authorization token in the headers
+      },
+    });
+    return response.data;
+  } catch (error) {
+    throw error;
+  }
+};
+
+export const deleteCategory = async (id) => {
+  try {
+    // Get the token from cookies
+    const token = Cookies.get("token");
+
+    // Set the headers with authorization token
+    const headers = {
+      Authorization: `Bearer ${token}`,
+    };
+
+    // Make the DELETE request to the backend API
+    const response = await axios.get(`${BASE_URL}/category-delete/${id}`, { headers });
+
+    // Return the response data
+    return response.data;
+  } catch (error) {
+    // Handle errors
+    throw error;
+  }
+};
+
+export const fetchCategoryById = async (id) => {
+  try {
+    const token = Cookies.get('token'); // Get the token from cookies
+    const headers = {
+      Authorization: `Bearer ${token}`, // Include the token in the request headers
+    };
+    const response = await axios.get(`${BASE_URL}/getByCategory/${id}`, { headers });
+    return response.data;
+  } catch (error) {
+    console.error('Error fetching brand by ID:', error);
+    throw error;
+  }
+};
+// catergory api here
