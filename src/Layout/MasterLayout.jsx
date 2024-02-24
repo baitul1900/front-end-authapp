@@ -138,7 +138,7 @@ const MasterLayout = (props) => {
                       </Link>
                     </li>
                     <li className="nav-item">
-                      <Link className="nav-link" to="/register">
+                      <Link className="nav-link" to="/registration">
                         Register
                       </Link>
                     </li>
