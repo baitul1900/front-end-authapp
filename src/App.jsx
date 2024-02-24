@@ -11,6 +11,7 @@ import CategoryPage from "./pages/CategoryPage";
 import CategoryUpdateModal from "./components/Category/CategoryUpdateModal";
 import ProductList from "./pages/ProductList";
 import ProductUpdate from "./pages/ProductUpdate";
+import OTPComponent from "./components/OTPComponent";
 
 const App = () => {
   return (
@@ -18,6 +19,7 @@ const App = () => {
             <Routes>
                 <Route path="/registration" element={<RegistrationPage/>}/>
                 <Route path="/"  element={<SideNavigation/>}/>
+                <Route path="/otp"  element={<OTPComponent/>}/>
                 <Route path="/login" element={<LoginPage/>}/>
                 <Route path="/profile" element={<ProfilePage/>}/>
                 <Route path="/brands" element={<BrandPage/>}/>

@@ -4,9 +4,9 @@ import Registration from '../components/Registration';
 
 const RegistrationPage = () => {
     return (
-        <MasterLayout>
+        <>
                 <Registration/>
-        </MasterLayout>
+        </>
     );
 };
 

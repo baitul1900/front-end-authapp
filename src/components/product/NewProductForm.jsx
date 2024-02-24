@@ -1,6 +1,11 @@
-import  { useState, useEffect } from "react";
+import { useState, useEffect } from "react";
 import { brandList, categoryList, createProduct } from "../../store/authStore";
 import { toast } from "react-hot-toast";
+
+import * as LR from "@uploadcare/blocks";
+
+LR.registerBlocks(LR);
+import { uploadFile } from "@uploadcare/upload-client";
 
 const NewProductForm = () => {
   const [brands, setBrands] = useState([]);
@@ -59,43 +64,123 @@ const NewProductForm = () => {
 
   return (
     <div className="container">
+      <lr-config
+        ctx-name="my-uploader"
+        pubkey="d19aa01b997d659f1ee1"
+        maxLocalFileSizeBytes={10000000}
+        imgOnly={true}
+        sourceList="local, url, camera, dropbox"
+      ></lr-config>
       <h2>Create New Product</h2>
       <form onSubmit={handleSubmit}>
         <div className="mb-3">
-          <label htmlFor="title" className="form-label">Title</label>
-          <input type="text" className="form-control" id="title" name="title" value={formData.title} onChange={handleChange} required />
+          <label htmlFor="title" className="form-label">
+            Title
+          </label>
+          <input
+            type="text"
+            className="form-control"
+            id="title"
+            name="title"
+            value={formData.title}
+            onChange={handleChange}
+            required
+          />
         </div>
         <div className="mb-3">
-          <label htmlFor="description" className="form-label">Description</label>
-          <textarea className="form-control" id="description" name="Des" value={formData.Des} onChange={handleChange} required />
+          <label htmlFor="description" className="form-label">
+            Description
+          </label>
+          <textarea
+            className="form-control"
+            id="description"
+            name="Des"
+            value={formData.Des}
+            onChange={handleChange}
+            required
+          />
         </div>
         <div className="mb-3">
-          <label htmlFor="price" className="form-label">Price</label>
-          <input type="number" step="0.01" className="form-control" id="price" name="price" value={formData.price} onChange={handleChange} required />
+          <label htmlFor="price" className="form-label">
+            Price
+          </label>
+          <input
+            type="number"
+            step="0.01"
+            className="form-control"
+            id="price"
+            name="price"
+            value={formData.price}
+            onChange={handleChange}
+            required
+          />
         </div>
         <div className="mb-3">
-          <label htmlFor="image" className="form-label">Image URL</label>
-          <input type="text" className="form-control" id="image" name="image" value={formData.image} onChange={handleChange} required />
+          <label htmlFor="image" className="form-label">
+            Image URL
+          </label>
+          <input
+            type="text"
+            className="form-control"
+            id="image"
+            name="image"
+            value={formData.image}
+            onChange={handleChange}
+            required
+          />
         </div>
         <div className="mb-3">
-          <label htmlFor="category" className="form-label">Category</label>
-          <select className="form-select" id="category" name="categoryID" value={formData.categoryID} onChange={handleChange} required>
+          <label htmlFor="category" className="form-label">
+            Category
+          </label>
+          <select
+            className="form-select"
+            id="category"
+            name="categoryID"
+            value={formData.categoryID}
+            onChange={handleChange}
+            required
+          >
             <option value="">Select Category</option>
             {categories.map((category) => (
-              <option key={category._id} value={category._id}>{category.categoryName}</option>
+              <option key={category._id} value={category._id}>
+                {category.categoryName}
+              </option>
             ))}
           </select>
         </div>
         <div className="mb-3">
-          <label htmlFor="brand" className="form-label">Brand</label>
-          <select className="form-select" id="brand" name="brandID" value={formData.brandID} onChange={handleChange} required>
+          <label htmlFor="brand" className="form-label">
+            Brand
+          </label>
+          <select
+            className="form-select"
+            id="brand"
+            name="brandID"
+            value={formData.brandID}
+            onChange={handleChange}
+            required
+          >
             <option value="">Select Brand</option>
             {brands.map((brand) => (
-              <option key={brand._id} value={brand._id}>{brand.brandName}</option>
+              <option key={brand._id} value={brand._id}>
+                {brand.brandName}
+              </option>
             ))}
           </select>
         </div>
-        <button type="submit" className="btn btn-primary">Create Product</button>
+        <button type="submit" className="btn btn-primary">
+          Create Product
+        </button>
+
+        <lr-file-uploader-regular
+          css-src="https://cdn.jsdelivr.net/npm/@uploadcare/blocks@0.32.4/web/lr-file-uploader-regular.min.css"
+          ctx-name="my-uploader"
+          class="my-config"
+          name="image"
+          value={formData.image}
+          onChange={handleChange}
+        ></lr-file-uploader-regular>
       </form>
     </div>
   );
