@@ -4,6 +4,7 @@ import { Link, useNavigate } from "react-router-dom";
 import { EditOutlined, DeleteOutlined } from "@ant-design/icons";
 import Cookies from "js-cookie";
 import { brandList, deleteBrand } from "../store/authStore";
+import BrandCreateModal from "./BrandCreateModal";
 
 const BrandTable = () => {
   const [brands, setBrands] = useState([]);
@@ -106,7 +107,7 @@ const BrandTable = () => {
         onCancel={handleCancel}
         footer={null}
       >
-        {/* Your create brand modal content here */}
+      <BrandCreateModal/>
       </Modal>
     </div>
   );

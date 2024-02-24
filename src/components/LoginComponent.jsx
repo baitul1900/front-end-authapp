@@ -20,8 +20,8 @@ const LoginComponent = () => {
     try {
       const response = await loginUser(formData.email, formData.password);
       if (response.status === "success") {
-        toast.success(response.message);
-        navigate("/");
+        toast.success("Successfully Logged In!");
+        navigate("/profile");
       } else {
         toast.error(response.message || "Failed to login");
       }
@@ -33,6 +33,7 @@ const LoginComponent = () => {
 
   return (
     <div className="container mt-5 pt-5">
+      <Toaster position="bottom-center" reverseOrder={false} />
       <form className="form" onSubmit={handleSubmit}>
         <div className="mb-3">
           <input

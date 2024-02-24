@@ -9,6 +9,8 @@ import BrandPage from "./pages/BrandPage";
 import BrandUpdate from "./pages/BrandUpdate";
 import CategoryPage from "./pages/CategoryPage";
 import CategoryUpdateModal from "./components/Category/CategoryUpdateModal";
+import ProductList from "./pages/ProductList";
+import ProductUpdate from "./pages/ProductUpdate";
 
 const App = () => {
   return (
@@ -22,6 +24,8 @@ const App = () => {
                 <Route path="/brands/:id" element={<BrandUpdate/>}/>
                 <Route path="/category" element={<CategoryPage/>}/>
                 <Route path="/category/:id" element={<CategoryUpdateModal/>}/>
+                <Route path="/product" element={<ProductList/>}/>
+                <Route path="/product-update/:productId" element={<ProductUpdate/>}/>
             </Routes>
     </BrowserRouter>
   );

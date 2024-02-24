@@ -246,3 +246,108 @@ export const fetchCategoryById = async (id) => {
   }
 };
 // catergory api here
+
+
+// all product her =============
+export const productList = async () => {
+  try {
+    const token = sessionStorage.getItem('token');
+    const response = await axios.get(`${BASE_URL}/product`, {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      }
+    })
+    return response.data;
+  }
+  catch (e) {
+    console.log(e)
+  }
+}
+
+export const productByBrand = async (brandID)=> {
+  try {
+    const token = sessionStorage.getItem('token');
+    const response = await axios.get(`${BASE_URL}/product-brand/${brandID}`, {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      }
+      });
+
+      return response.data;
+  }
+  catch (e) {
+    console.log(e)
+  }
+}
+
+
+export const productListByCategory  = async (categoryID)=> {
+  try {
+    const token = sessionStorage.getItem('token');
+    const response = await axios.get(`${BASE_URL}/product-category/${categoryID}`, {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      }
+      });
+
+      return response.data;
+  }
+  catch (e) {
+    console.log(e)
+  }
+}
+
+
+export const createProduct = async (formData)=> {
+  try {
+    const token = sessionStorage.getItem('token');
+    const response = await axios.post(`${BASE_URL}/create-product/`, formData, {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      }
+      });
+
+      return response.data;
+  }
+  catch (e) {
+    console.log(e)
+  }
+}
+
+
+export const updateProduct = async (id, data)=> {
+  try {
+    const token = sessionStorage.getItem('token');
+    const response = await axios.post(`${BASE_URL}/products/${id}`, data, {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      }
+      });
+      return response.data;
+  }
+  catch (e) {
+    console.log(e)
+  }
+}
+
+
+export const deleteProduct = async (id) => {
+  try {
+    // Get the token from cookies
+    const token = Cookies.get("token");
+
+    // Set the headers with authorization token
+    const headers = {
+      Authorization: `Bearer ${token}`,
+    };
+
+    // Make the DELETE request to the backend API
+    const response = await axios.delete(`${BASE_URL}/products/${id}`, { headers });
+
+    // Return the response data
+    return response.data;
+  } catch (error) {
+    // Handle errors
+    throw error;
+  }
+};

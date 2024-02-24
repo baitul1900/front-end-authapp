@@ -9,6 +9,7 @@ import {
   UserOutlined, // Import desired icons
   ShopOutlined,
 } from "@ant-design/icons";
+import toast, { Toaster } from "react-hot-toast";
 
 const { SubMenu } = Menu;
 
@@ -21,6 +22,7 @@ const items = [
   },
   { label: "Brands", key: "profile", path: "/brands" },
   { label: "Category", key: "profile", path: "/category" },
+  { label: "Product", key: "profile", path: "/product" },
 ];
 
 const MasterLayout = (props) => {
@@ -54,6 +56,8 @@ const MasterLayout = (props) => {
 
   const handleLogout = () => {
     Cookies.remove("token");
+    sessionStorage.removeItem("token");
+    toast.success("Logout successful");
     navigate("/");
   };
 
@@ -78,7 +82,11 @@ const MasterLayout = (props) => {
   return (
     <Fragment>
       <nav className="navbar navbar-expand-lg navbar-light bg-light fixed-top">
-        <div className="container">
+      <Toaster
+  position="top-center"
+  reverseOrder={false}
+/>
+        <div className="container-fluid">
           <Link className="navbar-brand" to="/">
             Your Brand
           </Link>
@@ -95,7 +103,7 @@ const MasterLayout = (props) => {
           </button>
           <div className="collapse navbar-collapse" id="navbarNav">
             <div className="container-fluid d-flex justify-content-end">
-              <ul className="navbar-nav text-eedn">
+              <ul className="navbar-nav d-flex justify-content-end">
                 {isLoggedIn ? (
                   <>
                     <li className="nav-item">
