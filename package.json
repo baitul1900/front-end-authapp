@@ -29,6 +29,7 @@
     "react-hot-toast": "^2.4.1",
     "react-router-dom": "^6.20.0",
     "react-toastify": "^10.0.4",
+    "uploadcare-widget": "^3.21.2",
     "zustand": "^4.5.1"
   },
   "devDependencies": {
