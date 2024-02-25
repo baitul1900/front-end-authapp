@@ -6,12 +6,12 @@ import axios from "axios"; // Import axios
 // Assuming you have a constant for the base URL
 import { Menu } from "antd";
 import {
-  UserOutlined, // Import desired icons
-  ShopOutlined,
+  UserOutlined, // Import desired icons,
 } from "@ant-design/icons";
 import toast, { Toaster } from "react-hot-toast";
+import ProfileDropDown from "./ProfileDropDown";
 
-const { SubMenu } = Menu;
+
 
 const items = [
   {
@@ -81,7 +81,7 @@ const MasterLayout = (props) => {
 
   return (
     <Fragment>
-      <nav className="navbar navbar-expand-lg navbar-light bg-light fixed-top">
+      <nav className="navbar navbar-expand-lg fixed-top">
       <Toaster
   position="top-center"
   reverseOrder={false}
@@ -106,27 +106,9 @@ const MasterLayout = (props) => {
               <ul className="navbar-nav d-flex justify-content-end">
                 {isLoggedIn ? (
                   <>
-                    <li className="nav-item">
-                      <button
-                        className="btn btn-link nav-link"
-                        onClick={handleLogout}
-                      >
-                        Logout
-                      </button>
-                    </li>
                     <li className="nav-item w-25 text-end">
                       {userData && (
-                        <Link className="nav-link" to="/profile">
-                          <img
-                            src={
-                              userData.image
-                                ? userData.image
-                                : "user-avatar.png"
-                            }
-                            alt="User Avatar"
-                            className="img-fluid w-25"
-                          />
-                        </Link>
+                        <ProfileDropDown/>
                       )}
                     </li>
                   </>
