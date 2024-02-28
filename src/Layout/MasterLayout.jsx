@@ -4,11 +4,14 @@ import Cookies from "js-cookie";
 import axios from "axios";
 import toast, { Toaster } from "react-hot-toast";
 import ProfileDropDown from "./ProfileDropDown";
+import { AppBar, Toolbar, IconButton, Typography, Drawer, List, ListItem, ListItemText, Collapse, Divider } from "@mui/material";
+import { Menu as MenuIcon, ExpandLess, ExpandMore } from "@mui/icons-material";
 
 const MasterLayout = (props) => {
   const [userData, setUserData] = useState(null);
   const isLoggedIn = Cookies.get("token");
   const [isSidebarOpen, setIsSidebarOpen] = useState(true);
+  const [open, setOpen] = useState(false); // Add state for the collapse
 
   useEffect(() => {
     const fetchUserProfile = async () => {
@@ -38,154 +41,79 @@ const MasterLayout = (props) => {
     setIsSidebarOpen(!isSidebarOpen);
   };
 
+  const handleClick = () => { // Define handleClick function to toggle the collapse
+    setOpen(!open);
+  };
+
   return (
     <Fragment>
-      <nav className="navbar navbar-expand-lg sticky-top">
-        <div className="container-fluid">
-          <Link className="navbar-brand" to="/">
+      <AppBar position="sticky">
+        <Toolbar>
+          <IconButton edge="start" color="inherit" aria-label="menu" onClick={toggleSidebar}>
+            <MenuIcon />
+          </IconButton>
+          <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
             Your Brand
-          </Link>
-          <button
-            className="navbar-toggler"
-            type="button"
-            data-bs-toggle="collapse"
-            data-bs-target="#navbarNav"
-            aria-controls="navbarNav"
-            aria-expanded="false"
-            aria-label="Toggle navigation"
-            onClick={toggleSidebar}
-          >
-            <span className="navbar-toggler-icon"></span>
-          </button>
-          <div className="collapse navbar-collapse" id="navbarNav">
-            <ul className="navbar-nav ms-auto">
-              {isLoggedIn ? (
-                <>
-                  <li className="nav-item dropdown">
-                    {userData && (
-                      <Link className="dropdown-item" to="/profile">
-                        <ProfileDropDown />
-                      </Link>
-                    )}
-                  </li>
-                  <li className="nav-item">
-                    <Link className="nav-link" to="/login">
-                      <i className="bi bi-bell-fill"></i>
-                    </Link>
-                  </li>
-                </>
-              ) : (
-                <li className="nav-item">
-                  <Link className="nav-link" to="/login">
-                    Login
-                  </Link>
-                </li>
-              )}
-            </ul>
+          </Typography>
+          <div>
+            {isLoggedIn ? (
+              <>
+                {userData && <ProfileDropDown />}
+                <IconButton color="inherit" component={Link} to="/login">
+                  <i className="bi bi-bell-fill"></i>
+                </IconButton>
+              </>
+            ) : (
+              <Link className="nav-link" to="/login">
+                Login
+              </Link>
+            )}
           </div>
-        </div>
-      </nav>
+        </Toolbar>
+      </AppBar>
 
-      <div
-        className={`container-fluid ${
-          isSidebarOpen ? "sidebar-open" : "sidebar-closed"
-        }`}
+      <Drawer
+        variant="permanent"
+        sx={{
+          width: 240,
+          flexShrink: 0,
+          '& .MuiDrawer-paper': {
+            width: 240,
+            boxSizing: 'border-box',
+          },
+        }}
+        open={isSidebarOpen}
       >
-        <div className="row">
-          <nav
-            id="sidebarMenu"
-            className="col-md-3 col-lg-2 d-md-block bg-light sidebar menu"
-          >
-            <div className="position-sticky pt-3">
-              <ul className="nav flex-column">
-                <li>
-                  <div className="accordion" id="sidebarAccordion">
-                    <div className="accordion-item">
-                      <h2 className="accordion-header" id="user-profile">
-                        <button
-                          className="accordion-button"
-                          type="button"
-                          data-bs-toggle="collapse"
-                          data-bs-target="#collapseUserProfile"
-                          aria-expanded="true"
-                          aria-controls="collapseUserProfile"
-                        >
-                          User Profile
-                        </button>
-                      </h2>
-                      <div
-                        id="collapseUserProfile"
-                        className="accordion-collapse collapse show"
-                        aria-labelledby="user-profile"
-                        data-bs-parent="#sidebarAccordion"
-                      >
-                        <div className="accordion-body">
-                          <ul className="nav flex-column">
-                            <li className="nav-item">
-                              <Link className="nav-link" to="/profile">
-                                <i className="bi bi-person-circle"></i> User
-                                Information
-                              </Link>
-                            </li>
-                          </ul>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                </li>
-                <li>
-                  <div className="accordion" id="product-section">
-                    <div className="accordion-item">
-                      <h2 className="accordion-header" id="headingProduct">
-                        <button
-                          className="accordion-button"
-                          type="button"
-                          data-bs-toggle="collapse"
-                          data-bs-target="#collapseProduct"
-                          aria-expanded="true"
-                          aria-controls="collapseProduct"
-                        >
-                          Product Section
-                        </button>
-                      </h2>
-                      <div
-                        id="collapseProduct"
-                        className="accordion-collapse collapse show"
-                        aria-labelledby="headingProduct"
-                        data-bs-parent="#product-section"
-                      >
-                        <div className="accordion-body">
-                          <ul className="nav flex-column">
-                            <li className="nav-item">
-                              <Link className="nav-link" to="/brands">
-                                Brands
-                              </Link>
-                            </li>
-                            <li className="nav-item">
-                              <Link className="nav-link" to="/category">
-                                Category
-                              </Link>
-                            </li>
-                            <li className="nav-item">
-                              <Link className="nav-link" to="/product">
-                                Product
-                              </Link>
-                            </li>
-                          </ul>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                </li>
-              </ul>
-            </div>
-          </nav>
+        <Toolbar />
+        <Divider />
+        <List>
+          <ListItem button onClick={handleClick}> {/* Apply handleClick to the ListItem button */}
+            <ListItemText primary="User Profile" />
+            {open ? <ExpandLess /> : <ExpandMore />}
+          </ListItem>
+          <Collapse in={open} timeout="auto" unmountOnExit>
+            <List component="div" disablePadding>
+              <ListItem button component={Link} to="/profile">
+                <ListItemText primary="User Information" />
+              </ListItem>
+            </List>
+          </Collapse>
+          <ListItem button component={Link} to="/brands">
+            <ListItemText primary="Brands" />
+          </ListItem>
+          <ListItem button component={Link} to="/category">
+            <ListItemText primary="Category" />
+          </ListItem>
+          <ListItem button component={Link} to="/product">
+            <ListItemText primary="Product" />
+          </ListItem>
+        </List>
+      </Drawer>
 
-          <main className="col-md-9 ms-sm-auto col-lg-10 px-md-4">
-            {props.children}
-          </main>
-        </div>
-      </div>
+      <main>
+        <Toolbar />
+        {props.children}
+      </main>
 
       <Toaster position="top-center" reverseOrder={false} />
     </Fragment>
