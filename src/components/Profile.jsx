@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { updateUserProfile, getUserProfile } from "../store/authStore";
 import toast, { Toaster } from "react-hot-toast";
+import { Button } from "primereact/button";
 
 const Profile = () => {
   const [password, setPassword] = useState("");
@@ -17,7 +18,6 @@ const Profile = () => {
     try {
       const response = await getUserProfile();
       if (response.status === "success") {
-        
         setUserProfile(response.data);
       } else {
         setErrorMessage("Failed to fetch user profile");
@@ -50,7 +50,6 @@ const Profile = () => {
 
   return (
     <div className="container mt-5 pt-5">
-      
       <h2 className="mb-4">Update Profile</h2>
       {userProfile && (
         <div className="mb-4">
@@ -70,6 +69,8 @@ const Profile = () => {
             className="img-fluid w-25"
             alt="Profile"
           />
+
+<Button label="Check" icon="pi pi-check" />
         </div>
       )}
       <form onSubmit={handleFormSubmit}>

@@ -5,12 +5,12 @@ body {
   box-sizing: border-box;
   font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto,
     Oxygen, Ubuntu, Cantarell, "Open Sans", "Helvetica Neue", sans-serif !important;
-  background-color: var(--bodyColor);
+  /* background-color: var(--bodyColor) !important; */
 }
 
 :root {
-  --bodyColor: #fbfbf7;
-  --primaryBodyColor: #9dc84f;
+  --bodyColor: #141416;
+  --primaryBodyColor: #dadbdf;
   --buttonColor: #00526e;
   --headingColor: #00526e;
   --fontColorMain: #000;
@@ -28,9 +28,11 @@ body {
 
 /* navbar Style */
 .navbar {
-  background-color: transparent;
-  padding-bottom: 10px !important;
-  height: 100%;
+  background-color: var(--primaryBodyColor);
+  width: 100%;
+  position: fixed;
+  /* padding-bottom: 10px !important; */
+  /* height: 100%; */
 }
 .logo {
   height: 60px;
@@ -40,11 +42,11 @@ body {
 .navbar-nav .nav-item a {
   font-size: var(--tweenty);
   text-decoration: none;
+  color: #fff;
 }
 
 .menu {
   background-color: var(--primaryBodyColor);
-  position: fixed;
   height: 100vh;
   margin-top: 0px;
 }
@@ -65,7 +67,7 @@ body {
   color: var(--fontColorSub) !important;
   text-decoration: none !important;
   font-weight: 400;
-  font-size: var(--peraSubMain);
+  font-size: 20px;
 }
 
 a {
@@ -77,4 +79,57 @@ a {
   --h-accent: 223;
   --s-accent: 100%;
   --l-accent: 61%;
+}
+
+.profile-image {
+  width: 50px;
+  height: 50px;
+}
+
+/* MasterLayout.css */
+
+/* Sidebar styles */
+/* Custom CSS for transparent background and focus background */
+/* Custom CSS for transparent background and focus background */
+
+/* Remove default accordion styling */
+.accordion-button {
+  background-color: rgba(0, 0, 0, 0) !important; /* Transparent background */
+  color: inherit;
+  border: none;
+  outline: none;
+  box-shadow: none;
+}
+
+/* Style accordion button on focus */
+
+/* Remove accordion item border */
+.accordion-item {
+  border: none !important;
+  background-color: transparent !important;
+}
+
+.accordion-button:focus {
+  z-index: 3;
+  border-color: none !important;
+  outline: none !important;
+  box-shadow: none !important;
+}
+
+.accordion-button:focus {
+  background-color: none !important;
+}
+
+.accordion-button:not(.collapsed) {
+  color: none !important;
+  background-color: none !important;
+  box-shadow: none !important;
+}
+
+.nav-link {
+  padding: 0px !important;
+}
+
+.accordion-body {
+  padding-block: 5px !important;
 }

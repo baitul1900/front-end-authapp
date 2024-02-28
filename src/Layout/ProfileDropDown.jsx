@@ -75,7 +75,7 @@ const ProfileDropDown = () => {
                   <img
                     src={userData.image ? userData.image : "user-avatar.png"}
                     alt="User Avatar"
-                    className="img-fluid w-50 pb-2"
+                    className="img-fluid profile-top pb-2 profile-image"
                   />
                 </Link>
               </Space>

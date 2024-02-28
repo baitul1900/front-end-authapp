@@ -1,34 +1,14 @@
-/* eslint-disable react/prop-types */
 import { Fragment, useState, useEffect } from "react";
-import { Link, useNavigate } from "react-router-dom";
+import { Link } from "react-router-dom";
 import Cookies from "js-cookie";
-import axios from "axios"; // Import axios
-// Assuming you have a constant for the base URL
-import { Menu } from "antd";
-import {
-  UserOutlined, // Import desired icons,
-} from "@ant-design/icons";
+import axios from "axios";
 import toast, { Toaster } from "react-hot-toast";
 import ProfileDropDown from "./ProfileDropDown";
-
-
-
-const items = [
-  {
-    label: "User Information",
-    key: "profile",
-    path: "/profile",
-    icon: <UserOutlined />,
-  },
-  { label: "Brands", key: "profile", path: "/brands" },
-  { label: "Category", key: "profile", path: "/category" },
-  { label: "Product", key: "profile", path: "/product" },
-];
 
 const MasterLayout = (props) => {
   const [userData, setUserData] = useState(null);
   const isLoggedIn = Cookies.get("token");
-  const navigate = useNavigate();
+  const [isSidebarOpen, setIsSidebarOpen] = useState(true);
 
   useEffect(() => {
     const fetchUserProfile = async () => {
@@ -36,14 +16,14 @@ const MasterLayout = (props) => {
         const token = Cookies.get("token");
         const config = {
           headers: {
-            Authorization: `Bearer ${token}`, // Set the Authorization header with the token
+            Authorization: `Bearer ${token}`,
           },
         };
         const response = await axios.get(
           "http://localhost:8000/api/v1/profile",
           config
-        ); // Fetch user profile data
-        setUserData(response.data.data); // Assuming the user data is nested under the 'data' key
+        );
+        setUserData(response.data.data);
       } catch (error) {
         console.error("Error fetching user profile:", error);
       }
@@ -54,38 +34,13 @@ const MasterLayout = (props) => {
     }
   }, [isLoggedIn]);
 
-  const handleLogout = () => {
-    Cookies.remove("token");
-    sessionStorage.removeItem("token");
-    toast.success("Logout successful");
-    navigate("/");
-  };
-
-  const renderMenuItems = () => {
-    return items.map((item) => {
-      if (item.path) {
-        return (
-          <Menu.Item key={item.key} icon={item.icon}>
-            <Link to={item.path}>{item.label}</Link>
-          </Menu.Item>
-        );
-      } else {
-        return (
-          <Menu.Item key={item.key} icon={item.icon}>
-            {item.label}
-          </Menu.Item>
-        );
-      }
-    });
+  const toggleSidebar = () => {
+    setIsSidebarOpen(!isSidebarOpen);
   };
 
   return (
     <Fragment>
-      <nav className="navbar navbar-expand-lg fixed-top">
-      <Toaster
-  position="top-center"
-  reverseOrder={false}
-/>
+      <nav className="navbar navbar-expand-lg sticky-top">
         <div className="container-fluid">
           <Link className="navbar-brand" to="/">
             Your Brand
@@ -93,55 +48,146 @@ const MasterLayout = (props) => {
           <button
             className="navbar-toggler"
             type="button"
-            data-toggle="collapse"
-            data-target="#navbarNav"
+            data-bs-toggle="collapse"
+            data-bs-target="#navbarNav"
             aria-controls="navbarNav"
             aria-expanded="false"
             aria-label="Toggle navigation"
+            onClick={toggleSidebar}
           >
             <span className="navbar-toggler-icon"></span>
           </button>
           <div className="collapse navbar-collapse" id="navbarNav">
-            <div className="container-fluid d-flex justify-content-end">
-              <ul className="navbar-nav d-flex justify-content-end">
-                {isLoggedIn ? (
-                  <>
-                    <li className="nav-item w-25 text-end">
-                      {userData && (
-                        <ProfileDropDown/>
-                      )}
-                    </li>
-                  </>
-                ) : (
-                  <>
-                    <li className="nav-item">
-                      <Link className="nav-link" to="/login">
-                        Login
+            <ul className="navbar-nav ms-auto">
+              {isLoggedIn ? (
+                <>
+                  <li className="nav-item dropdown">
+                    {userData && (
+                      <Link className="dropdown-item" to="/profile">
+                        <ProfileDropDown />
                       </Link>
-                    </li>
-                    <li className="nav-item">
-                      <Link className="nav-link" to="/registration">
-                        Register
-                      </Link>
-                    </li>
-                  </>
-                )}
-              </ul>
-            </div>
+                    )}
+                  </li>
+                  <li className="nav-item">
+                    <Link className="nav-link" to="/login">
+                      <i className="bi bi-bell-fill"></i>
+                    </Link>
+                  </li>
+                </>
+              ) : (
+                <li className="nav-item">
+                  <Link className="nav-link" to="/login">
+                    Login
+                  </Link>
+                </li>
+              )}
+            </ul>
           </div>
         </div>
       </nav>
 
-      <Menu
-        className=" pt-5 menu bg-secondary text-dark"
-        style={{ width: 256 }}
-        mode="vertical"
-        defaultSelectedKeys={["profile"]}
+      <div
+        className={`container-fluid ${
+          isSidebarOpen ? "sidebar-open" : "sidebar-closed"
+        }`}
       >
-        {renderMenuItems()}
-      </Menu>
+        <div className="row">
+          <nav
+            id="sidebarMenu"
+            className="col-md-3 col-lg-2 d-md-block bg-light sidebar menu"
+          >
+            <div className="position-sticky pt-3">
+              <ul className="nav flex-column">
+                <li>
+                  <div className="accordion" id="sidebarAccordion">
+                    <div className="accordion-item">
+                      <h2 className="accordion-header" id="user-profile">
+                        <button
+                          className="accordion-button"
+                          type="button"
+                          data-bs-toggle="collapse"
+                          data-bs-target="#collapseUserProfile"
+                          aria-expanded="true"
+                          aria-controls="collapseUserProfile"
+                        >
+                          User Profile
+                        </button>
+                      </h2>
+                      <div
+                        id="collapseUserProfile"
+                        className="accordion-collapse collapse show"
+                        aria-labelledby="user-profile"
+                        data-bs-parent="#sidebarAccordion"
+                      >
+                        <div className="accordion-body">
+                          <ul className="nav flex-column">
+                            <li className="nav-item">
+                              <Link className="nav-link" to="/profile">
+                                <i className="bi bi-person-circle"></i> User
+                                Information
+                              </Link>
+                            </li>
+                          </ul>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </li>
+                <li>
+                  <div className="accordion" id="product-section">
+                    <div className="accordion-item">
+                      <h2 className="accordion-header" id="headingProduct">
+                        <button
+                          className="accordion-button"
+                          type="button"
+                          data-bs-toggle="collapse"
+                          data-bs-target="#collapseProduct"
+                          aria-expanded="true"
+                          aria-controls="collapseProduct"
+                        >
+                          Product Section
+                        </button>
+                      </h2>
+                      <div
+                        id="collapseProduct"
+                        className="accordion-collapse collapse show"
+                        aria-labelledby="headingProduct"
+                        data-bs-parent="#product-section"
+                      >
+                        <div className="accordion-body">
+                          <ul className="nav flex-column">
+                            <li className="nav-item">
+                              <Link className="nav-link" to="/brands">
+                                Brands
+                              </Link>
+                            </li>
+                            <li className="nav-item">
+                              <Link className="nav-link" to="/category">
+                                Category
+                              </Link>
+                            </li>
+                            <li className="nav-item">
+                              <Link className="nav-link" to="/product">
+                                Product
+                              </Link>
+                            </li>
+                          </ul>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </li>
+              </ul>
+            </div>
+          </nav>
 
-      {props.children}
+          <main className="col-md-9 ms-sm-auto col-lg-10 px-md-4">
+            {props.children}
+          </main>
+        </div>
+      </div>
+
+      <Toaster position="top-center" reverseOrder={false} />
     </Fragment>
   );
 };
