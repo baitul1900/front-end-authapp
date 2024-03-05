@@ -2,10 +2,12 @@ import React, { useState, useEffect } from "react";
 import { updateUserProfile, getUserProfile } from "../store/authStore";
 import toast, { Toaster } from "react-hot-toast";
 import { Button } from "primereact/button";
+import firebase from "firebase/compat/app";
+import "firebase/compat/storage";
 
 const Profile = () => {
   const [password, setPassword] = useState("");
-  const [imageLink, setImageLink] = useState("");
+  const [image, setImage] = useState(null);
   const [errorMessage, setErrorMessage] = useState("");
   const [successMessage, setSuccessMessage] = useState("");
   const [userProfile, setUserProfile] = useState(null);
@@ -31,8 +33,18 @@ const Profile = () => {
     e.preventDefault();
 
     try {
+      let imageUrl = userProfile.image;
+
+      // If a new image is selected, upload it to Firebase Storage
+      if (image) {
+        const storageRef = firebase.storage().ref();
+        const imageRef = storageRef.child(`profile-images/${image.name}`);
+        const snapshot = await imageRef.put(image);
+        imageUrl = await snapshot.ref.getDownloadURL();
+      }
+
       // Call the updateUserProfile function from the API service
-      const response = await updateUserProfile(password, imageLink);
+      const response = await updateUserProfile(password, imageUrl);
 
       // Check the response status
       if (response.status === "success") {
@@ -48,8 +60,12 @@ const Profile = () => {
     }
   };
 
+  const handleImageChange = (e) => {
+    setImage(e.target.files[0]);
+  };
+
   return (
-    <div className="container mt-5 pt-5">
+    <div className="container mt-4">
       <h2 className="mb-4">Update Profile</h2>
       {userProfile && (
         <div className="mb-4">
@@ -63,14 +79,11 @@ const Profile = () => {
           <p>
             <strong>Phone:</strong> {userProfile.phone}
           </p>
-          {/* <p><strong>Image Link:</strong> {userProfile.image}</p */}
           <img
-            src={userProfile["image"]}
-            className="img-fluid w-25"
+            src={userProfile.image}
+            className="img-fluid profile-iamge"
             alt="Profile"
           />
-
-<Button label="Check" icon="pi pi-check" />
         </div>
       )}
       <form onSubmit={handleFormSubmit}>
@@ -87,15 +100,14 @@ const Profile = () => {
           />
         </div>
         <div className="mb-3">
-          <label htmlFor="imageLink" className="form-label">
-            Image Link:
+          <label htmlFor="image" className="form-label">
+            Update Profile Picture:
           </label>
           <input
-            id="imageLink"
-            type="text"
+            id="image"
+            type="file"
             className="form-control"
-            value={imageLink}
-            onChange={(e) => setImageLink(e.target.value)}
+            onChange={handleImageChange}
           />
         </div>
         <button type="submit" className="btn btn-primary">

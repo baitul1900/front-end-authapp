@@ -133,3 +133,9 @@ a {
 .accordion-body {
   padding-block: 5px !important;
 }
+
+.profile-iamge {
+  width: 200px;
+  height: 200px;
+  border-radius: 50%;
+}

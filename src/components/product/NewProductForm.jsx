@@ -1,11 +1,9 @@
 import { useState, useEffect } from "react";
 import { brandList, categoryList, createProduct } from "../../store/authStore";
 import { toast } from "react-hot-toast";
-
-import * as LR from "@uploadcare/blocks";
-
-LR.registerBlocks(LR);
-import { uploadFile } from "@uploadcare/upload-client";
+import imageCompression from "browser-image-compression";
+import firebase from "firebase/compat/app";
+import "firebase/compat/storage";
 
 const NewProductForm = () => {
   const [brands, setBrands] = useState([]);
@@ -18,6 +16,8 @@ const NewProductForm = () => {
     categoryID: "",
     brandID: "",
   });
+
+  const [loading, setLoading] = useState(false);
 
   useEffect(() => {
     const fetchBrandsAndCategories = async () => {
@@ -44,10 +44,10 @@ const NewProductForm = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    setLoading(true); // Set loading to true when starting product creation
     try {
       await createProduct(formData);
       toast.success("Product created successfully!");
-      // Clear form fields after successful submission
       setFormData({
         title: "",
         Des: "",
@@ -59,18 +59,54 @@ const NewProductForm = () => {
     } catch (error) {
       console.error("Error creating product:", error);
       toast.error("Failed to create product. Please try again.");
+    } finally {
+      setLoading(false); // Set loading to false when product creation completes
     }
+  };
+
+  const [image, setImage] = useState(null);
+  const [imageUrl, setImageUrl] = useState(null);
+
+  const handleImageChange = (e) => {
+    setImage(e.target.files[0]);
+  };
+
+  const handleUpload = async () => {
+    setLoading(true); // Set loading to true when starting image upload
+    try {
+      const compressedImage = await compressImage(image);
+      const imageUrl = await uploadImage(compressedImage);
+      setImageUrl(imageUrl);
+      setFormData((prevFormData) => ({
+        ...prevFormData,
+        image: imageUrl,
+      }));
+    } catch (error) {
+      console.error("Error uploading image:", error);
+    } finally {
+      setLoading(false); // Set loading to false when image upload completes
+    }
+  };
+
+  const compressImage = async (file) => {
+    const options = {
+      maxSizeMB: 1,
+      maxWidthOrHeight: 1000,
+      useWebWorker: true,
+    };
+
+    return await imageCompression(file, options);
+  };
+
+  const uploadImage = async (compressedImage) => {
+    const storageRef = firebase.storage().ref();
+    const imageRef = storageRef.child(`images/${image.name}`);
+    const snapshot = await imageRef.put(compressedImage);
+    return await snapshot.ref.getDownloadURL();
   };
 
   return (
     <div className="container">
-      <lr-config
-        ctx-name="my-uploader"
-        pubkey="d19aa01b997d659f1ee1"
-        maxLocalFileSizeBytes={10000000}
-        imgOnly={true}
-        sourceList="local, url, camera, dropbox"
-      ></lr-config>
       <h2>Create New Product</h2>
       <form onSubmit={handleSubmit}>
         <div className="mb-3">
@@ -115,20 +151,34 @@ const NewProductForm = () => {
             required
           />
         </div>
-        <div className="mb-3">
-          <label htmlFor="image" className="form-label">
-            Image URL
-          </label>
+        {/* Rest of your form elements */}
+        {imageUrl ? (
           <input
-            type="text"
-            className="form-control"
-            id="image"
+            type="hidden"
             name="image"
             value={formData.image}
             onChange={handleChange}
-            required
           />
-        </div>
+        ) : (
+          <div className="mb-3">
+            <label htmlFor="image" className="form-label d-none">
+              Image URL
+            </label>
+            <input
+              type="text"
+              className="form-control d-none"
+              id="image"
+              name="image"
+              value={formData.image}
+              onChange={handleChange}
+              required
+            />
+          </div>
+        )}
+
+        <input type="file" onChange={handleImageChange} />
+        <button onClick={handleUpload}>Upload Image</button>
+
         <div className="mb-3">
           <label htmlFor="category" className="form-label">
             Category
@@ -169,18 +219,9 @@ const NewProductForm = () => {
             ))}
           </select>
         </div>
-        <button type="submit" className="btn btn-primary">
-          Create Product
+        <button type="submit" className="btn btn-primary" disabled={loading}>
+          {loading ? "Creating..." : "Create Product"}
         </button>
-
-        <lr-file-uploader-regular
-          css-src="https://cdn.jsdelivr.net/npm/@uploadcare/blocks@0.32.4/web/lr-file-uploader-regular.min.css"
-          ctx-name="my-uploader"
-          class="my-config"
-          name="image"
-          value={formData.image}
-          onChange={handleChange}
-        ></lr-file-uploader-regular>
       </form>
     </div>
   );
