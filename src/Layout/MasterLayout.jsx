@@ -1,119 +1,140 @@
 import { Fragment, useState, useEffect } from "react";
-import { Link } from "react-router-dom";
+import { Link, NavLink } from "react-router-dom";
 import Cookies from "js-cookie";
 import axios from "axios";
 import toast, { Toaster } from "react-hot-toast";
 import ProfileDropDown from "./ProfileDropDown";
-import { AppBar, Toolbar, IconButton, Typography, Drawer, List, ListItem, ListItemText, Collapse, Divider } from "@mui/material";
-import { Menu as MenuIcon, ExpandLess, ExpandMore } from "@mui/icons-material";
 
 const MasterLayout = (props) => {
   const [userData, setUserData] = useState(null);
   const isLoggedIn = Cookies.get("token");
   const [isSidebarOpen, setIsSidebarOpen] = useState(true);
-  const [open, setOpen] = useState(false); // Add state for the collapse
 
   useEffect(() => {
     const fetchUserProfile = async () => {
       try {
         const token = Cookies.get("token");
-        const config = {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        };
-        const response = await axios.get(
-          "http://localhost:8000/api/v1/profile",
-          config
-        );
-        setUserData(response.data.data);
+        if (token) {
+          const config = {
+            headers: {
+              Authorization: `Bearer ${token}`,
+            },
+          };
+          const response = await axios.get(
+            "http://localhost:8000/api/v1/profile",
+            config
+          );
+          setUserData(response.data.data);
+        }
       } catch (error) {
         console.error("Error fetching user profile:", error);
       }
     };
 
-    if (isLoggedIn) {
-      fetchUserProfile();
-    }
-  }, [isLoggedIn]);
+    fetchUserProfile();
+  }, []);
 
   const toggleSidebar = () => {
     setIsSidebarOpen(!isSidebarOpen);
   };
 
-  const handleClick = () => { // Define handleClick function to toggle the collapse
-    setOpen(!open);
-  };
+  useEffect(() => {
+    const showNavbar = (toggleId, navId, bodyId, headerId) => {
+      const toggle = document.getElementById(toggleId),
+        nav = document.getElementById(navId),
+        bodypd = document.getElementById(bodyId),
+        headerpd = document.getElementById(headerId);
+
+      // Validate that all variables exist
+      if (toggle && nav && bodypd && headerpd) {
+        toggle.addEventListener("click", () => {
+          // show navbar
+          nav.classList.toggle("show");
+          // change icon
+          toggle.classList.toggle("bx-x");
+          // add padding to body
+          bodypd.classList.toggle("body-pd");
+          // add padding to header
+          headerpd.classList.toggle("body-pd");
+        });
+      }
+    };
+
+    showNavbar("header-toggle", "nav-bar", "main-container", "header");
+  }, []);
 
   return (
     <Fragment>
-      <AppBar position="sticky">
-        <Toolbar>
-          <IconButton edge="start" color="inherit" aria-label="menu" onClick={toggleSidebar}>
-            <MenuIcon />
-          </IconButton>
-          <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
-            Your Brand
-          </Typography>
+      {/* Header */}
+      <header className="header" id="header">
+        <div className="header_toggle" onClick={toggleSidebar}>
+          <i className="bi bi-list-nested" id="header-toggle"></i>
+        </div>
+        <div className="header_img">
+          {isLoggedIn && userData ? (
+            <>
+              {/* <img
+                src={userData.profileImageUrl}
+                className="img-fluid"
+                alt="Profile"
+              /> */}
+              <ProfileDropDown />
+            </>
+          ) : (
+            <></>
+          )}
+        </div>
+      </header>
+
+      {/* Sidebar */}
+      <div className={`l-navbar ${isSidebarOpen ? "show" : ""}`} id="nav-bar">
+        <nav className="nav">
           <div>
-            {isLoggedIn ? (
-              <>
-                {userData && <ProfileDropDown />}
-                <IconButton color="inherit" component={Link} to="/login">
-                  <i className="bi bi-bell-fill"></i>
-                </IconButton>
-              </>
-            ) : (
-              <Link className="nav-link" to="/login">
-                Login
-              </Link>
-            )}
+            <a href="#" className="nav_logo">
+              <i className="bx bx-layer nav_logo-icon"></i>
+              <span className="nav_logo-name">BBBootstrap</span>
+            </a>
+            <div className="nav_list">
+              <NavLink
+                to={"/users"}
+                className="nav_link active text-decoration-none"
+              >
+                <i className="bi bi-person-circle"></i>
+                <span className="nav_name">Dashboard</span>
+              </NavLink>
+              <a href="#" className="nav_link">
+                <i className="bx bx-user nav_icon"></i>
+                <span className="nav_name">Users</span>
+              </a>
+              <a href="#" className="nav_link">
+                <i className="bx bx-message-square-detail nav_icon"></i>
+                <span className="nav_name">Messages</span>
+              </a>
+              <a href="#" className="nav_link">
+                <i className="bx bx-bookmark nav_icon"></i>
+                <span className="nav_name">Bookmark</span>
+              </a>
+              <a href="#" className="nav_link">
+                <i className="bx bx-folder nav_icon"></i>
+                <span className="nav_name">Files</span>
+              </a>
+              <a href="#" className="nav_link">
+                <i className="bx bx-bar-chart-alt-2 nav_icon"></i>
+                <span className="nav_name">Stats</span>
+              </a>
+            </div>
           </div>
-        </Toolbar>
-      </AppBar>
+          <a href="#" className="nav_link">
+            <i className="bx bx-log-out nav_icon"></i>
+            <span className="nav_name">SignOut</span>
+          </a>
+        </nav>
+      </div>
 
-      <Drawer
-        variant="permanent"
-        sx={{
-          width: 240,
-          flexShrink: 0,
-          '& .MuiDrawer-paper': {
-            width: 240,
-            boxSizing: 'border-box',
-          },
-        }}
-        open={isSidebarOpen}
-      >
-        <Toolbar />
-        <Divider />
-        <List>
-          <ListItem button onClick={handleClick}> {/* Apply handleClick to the ListItem button */}
-            <ListItemText primary="User Profile" />
-            {open ? <ExpandLess /> : <ExpandMore />}
-          </ListItem>
-          <Collapse in={open} timeout="auto" unmountOnExit>
-            <List component="div" disablePadding>
-              <ListItem button component={Link} to="/profile">
-                <ListItemText primary="User Information" />
-              </ListItem>
-            </List>
-          </Collapse>
-          <ListItem button component={Link} to="/brands">
-            <ListItemText primary="Brands" />
-          </ListItem>
-          <ListItem button component={Link} to="/category">
-            <ListItemText primary="Category" />
-          </ListItem>
-          <ListItem button component={Link} to="/product">
-            <ListItemText primary="Product" />
-          </ListItem>
-        </List>
-      </Drawer>
-
-      <main>
-        <Toolbar />
+      {/* Main Container */}
+      <div className={`container ${isSidebarOpen ? "" : "main-full-width"}`} id="main-container">
         {props.children}
-      </main>
+      </div>
 
       <Toaster position="top-center" reverseOrder={false} />
     </Fragment>
