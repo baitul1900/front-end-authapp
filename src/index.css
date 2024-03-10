@@ -15,9 +15,8 @@
   box-sizing: border-box;
 }
 body {
-  position: relative;
-  margin: var(--header-height) 0 0 0;
-  padding: 0 1rem;
+  padding: 0px;
+  margin: 0px;
   font-family: var(--body-font);
   font-size: var(--normal-font-size);
   transition: 0.5s;
@@ -104,78 +103,19 @@ a {
 .nav_icon {
   font-size: 1.25rem;
 }
-.show {
-  left: 0;
-}
-.body-pd {
-  padding-left: calc(var(--nav-width) + 1rem);
-}
-.active {
-  color: var(--white-color);
-}
-.active::before {
-  content: "";
-  position: absolute;
-  left: 0;
-  width: 2px;
-  height: 32px;
-  background-color: var(--white-color);
-}
-.height-100 {
+
+/* login container  */
+#login-container {
+  background-image: url("../src/assets/image/login-backgroudn.jpg");
   height: 100vh;
-}
-@media screen and (min-width: 768px) {
-  body {
-    margin: calc(var(--header-height) + 1rem) 0 0 0;
-    padding-left: calc(var(--nav-width) + 2rem);
-  }
-  .header {
-    height: calc(var(--header-height) + 1rem);
-    padding: 0 2rem 0 calc(var(--nav-width) + 2rem);
-  }
-  .header_img {
-    width: 40px;
-    height: 40px;
-  }
-  .header_img img {
-    width: 45px;
-  }
-  .l-navbar {
-    left: 0;
-    padding: 1rem 1rem 0 0;
-  }
-  .show {
-    width: calc(var(--nav-width) + 156px);
-  }
-  .body-pd {
-    padding-left: calc(var(--nav-width) + 188px);
-  }
+  background-repeat: no-repeat;
+  background-position: center;
+  background-size: cover;
 }
 
-.main-full-width {
-  width: 100%;
+#login-container .container {
+  background: rgba(0, 0, 0, 0.293);
+  padding-block: 20px;
+  border-radius: 10px;
 }
-
-@media screen and (min-width: 992px) {
-  .container {
-    max-width: none; /* Reset max-width for container */
-  }
-}
-
-.main-full-width {
-  width: 100%;
-}
-
-.l-navbar {
-  width: 250px; /* Set the width of the sidebar */
-}
-
-.sidebar-open #main-container {
-  width: calc(
-    100% - 250px
-  ); /* Adjust the width of the main container when sidebar is open */
-}
-
-#main-container {
-  transition: width 0.3s ease; /* Add transition for smooth animation */
-}
+/* login container  end */
