@@ -1,5 +1,5 @@
 import { Fragment, useState, useEffect } from "react";
-import { Link, NavLink } from "react-router-dom";
+import { NavLink } from "react-router-dom";
 import Cookies from "js-cookie";
 import axios from "axios";
 import toast, { Toaster } from "react-hot-toast";
@@ -71,18 +71,7 @@ const MasterLayout = (props) => {
           <i className="bi bi-list-nested" id="header-toggle"></i>
         </div>
         <div className="header_img">
-          {isLoggedIn && userData ? (
-            <>
-              {/* <img
-                src={userData.profileImageUrl}
-                className="img-fluid"
-                alt="Profile"
-              /> */}
-              <ProfileDropDown />
-            </>
-          ) : (
-            <></>
-          )}
+          {isLoggedIn && userData ? <ProfileDropDown /> : <></>}
         </div>
       </header>
 
@@ -132,7 +121,10 @@ const MasterLayout = (props) => {
       </div>
 
       {/* Main Container */}
-      <div className={`container ${isSidebarOpen ? "" : "main-full-width"}`} id="main-container">
+      <div
+        className={`container ${isSidebarOpen ? "" : "main-full-width"}`}
+        id="main-container"
+      >
         {props.children}
       </div>
 

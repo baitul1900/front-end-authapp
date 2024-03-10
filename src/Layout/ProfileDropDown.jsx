@@ -71,13 +71,13 @@ const ProfileDropDown = () => {
           >
             <a onClick={(e) => e.preventDefault()}>
               <Space>
-                <Link className="nav-link" to="/profile">
+                
                   <img
                     src={userData.image ? userData.image : "user-avatar.png"}
                     alt="User Avatar"
                     className="img-fluid profile-top pb-2 profile-image"
                   />
-                </Link>
+                
               </Space>
             </a>
           </Dropdown>

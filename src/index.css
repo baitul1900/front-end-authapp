@@ -161,3 +161,21 @@ a {
     max-width: none; /* Reset max-width for container */
   }
 }
+
+.main-full-width {
+  width: 100%;
+}
+
+.l-navbar {
+  width: 250px; /* Set the width of the sidebar */
+}
+
+.sidebar-open #main-container {
+  width: calc(
+    100% - 250px
+  ); /* Adjust the width of the main container when sidebar is open */
+}
+
+#main-container {
+  transition: width 0.3s ease; /* Add transition for smooth animation */
+}

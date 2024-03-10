@@ -12,6 +12,7 @@ import CategoryUpdateModal from "./components/Category/CategoryUpdateModal";
 import ProductList from "./pages/ProductList";
 import ProductUpdate from "./pages/ProductUpdate";
 import OTPComponent from "./components/OTPComponent";
+import Test from "./Layout/Test";
 
 const App = () => {
   return (
@@ -28,6 +29,7 @@ const App = () => {
                 <Route path="/category/:id" element={<CategoryUpdateModal/>}/>
                 <Route path="/product" element={<ProductList/>}/>
                 <Route path="/product-update/:productId" element={<ProductUpdate/>}/>
+                <Route path="/test" element={<Test/>}/>
             </Routes>
     </BrowserRouter>
   );
