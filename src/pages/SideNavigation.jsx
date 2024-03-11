@@ -2,6 +2,7 @@ import { Menu } from "antd";
 import MasterLayout from "../Layout/MasterLayout";
 import Profile from "../components/Profile";
 import { Link } from "react-router-dom";
+import Test from "../Layout/Test";
 
 const { SubMenu } = Menu;
 
@@ -28,19 +29,7 @@ const SideNavigation = (props) => {
     });
   };
 
-  return (
-    <MasterLayout>
-      <Menu
-        className="mt-5 pt-5"
-        style={{ width: 256 }}
-        mode="vertical"
-        defaultSelectedKeys={["profile"]}
-      >
-        {renderMenuItems()}
-      </Menu>
-      {props.childern}
-    </MasterLayout>
-  );
+  return <Test>{props.childern}</Test>;
 };
 
 export default SideNavigation;

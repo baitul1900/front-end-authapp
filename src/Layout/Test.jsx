@@ -129,14 +129,7 @@ export default function Test(props) {
     setOpen(false);
   };
 
-  const handleSignOut = () => {
-    // Implement sign-out functionality here
-    // For example, clear cookies or tokens
-    Cookies.remove("token");
-    // Redirect user to login page or perform any other necessary actions
-    // window.location.href = "/login";
-    toast.success("Successfully signed out");
-  };
+  
 
   return (
     <Box sx={{ display: "flex" }}>

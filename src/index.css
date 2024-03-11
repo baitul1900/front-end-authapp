@@ -119,3 +119,19 @@ a {
   border-radius: 10px;
 }
 /* login container  end */
+
+.css-1191obr-MuiPaper-root-MuiAppBar-root {
+  z-index: 0 !important;
+}
+
+.header_img-02 {
+  width: 500px;
+  height: 500px;
+}
+
+.pro-pic {
+  height: 420px !important;
+  width: 420px;
+  border-radius: 50% !important;
+  object-fit: cover !important;
+}

@@ -65,7 +65,7 @@ const Profile = () => {
   };
 
   return (
-    <div className="container mt-4">
+    <div className="container-fluid mt-4">
       <h2 className="mb-4">Update Profile</h2>
       {userProfile && (
         <div className="mb-4">
@@ -120,8 +120,86 @@ const Profile = () => {
       {successMessage && (
         <p style={{ color: "green", marginTop: "10px" }}>{successMessage}</p>
       )}
+
+      {/* profile section here */}
+      {userProfile && (
+        <div className="row">
+          <div className="col-7 border rounded p-4 mt-4 mb-4 shadow">
+            {/* information box here */}
+            <h1>Profile Info</h1>
+            <form htmlFor>
+              <div className="mb-3">
+                <label htmlFor="name" className="form-label">
+                  Name:
+                </label>
+                <input
+                  id="name"
+                  type="text"
+                  className="form-control"
+                  value={userProfile.name}
+                  disabled
+                />
+              </div>
+              <div className="mb-3">
+                <label htmlFor="email" className="form-label">
+                  Email:
+                </label>
+                <input
+                  id="email"
+                  type="email"
+                  className="form-control"
+                  value={userProfile.email}
+                  disabled
+                />
+              </div>
+
+              <div className="mb-3">
+                <label htmlFor="phone" className="form-label">
+                  Phone:
+                </label>
+                <input
+                  id="phone"
+                  type="text"
+                  className="form-control"
+                  value={userProfile.phone}
+                  disabled
+                />
+              </div>
+            </form>
+          </div>
+
+          <div className="col-5 d-flex justify-content-center p-4 mt-4 mb-4">
+            <div className="header_img-02">
+              {" "}
+              <img
+                src={userProfile.image}
+                className="img-fluid pro-pic"
+                alt="Profile"
+              />
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* profile section here */}
     </div>
   );
 };
 
 export default Profile;
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
